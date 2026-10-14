@@ -8,8 +8,9 @@
 	// --- Skala tetap agar kuadran tetap sebanding ---
 	const X_MAKS = 100; // realisasi keuangan (%)
 	const Y_MAKS = 120; // capaian kinerja (%)
-	const L = 58,
-		R = 672,
+	// Kanvas lebar (rasio lebar) supaya grafik memenuhi kartu tanpa jadi tinggi
+	const L = 64,
+		R = 1160,
 		T = 18,
 		B = 392;
 	const W = R - L;
@@ -62,8 +63,11 @@
 		<CardTitle class="text-base text-[color:var(--primary)]">Kinerja vs Anggaran</CardTitle>
 	</CardHeader>
 	<CardContent>
-		<div class="overflow-x-auto">
-			<svg viewBox="0 0 700 440" class="mx-auto h-auto w-full min-w-[560px]" role="img">
+		<div class="mb-2 text-[11px] text-muted-foreground pdf-hide sm:hidden">
+			← Geser grafik ke samping untuk melihat seluruhnya →
+		</div>
+		<div class="min-w-0 overflow-x-auto">
+			<svg viewBox="0 0 1180 430" class="mx-auto h-auto w-full min-w-[860px]" role="img">
 				<!-- bidang kuadran -->
 				<rect x={px(xBar)} y={T} width={R - px(xBar)} height={py(yBar) - T} fill="var(--dim-eksekusi)" opacity="0.05" />
 				<rect x={px(xBar)} y={py(yBar)} width={R - px(xBar)} height={B - py(yBar)} fill="var(--kat-kurang)" opacity="0.05" />
@@ -186,7 +190,7 @@
 					class="no-print cursor-pointer rounded-lg border-l-4 p-2.5 text-left transition-all {aktif
 						? 'ring-2 ring-[color:var(--ring)] ring-offset-1'
 						: 'hover:brightness-95'}"
-					style="border-color:{q.warna};background:color-mix(in srgb, {q.warna} 8%, white)"
+					style="border-color:{q.warna};background:{q.bg}"
 				>
 					<div class="flex items-center gap-1.5">
 						<span class="text-[11px] font-semibold" style="color:{q.warna}">{q.label}</span>
@@ -209,39 +213,41 @@
 						>— {KUADRAN[pilih].ket} · {perKuadran[pilih].length} SKPD</span
 					>
 				</div>
-				<table class="w-full text-[12.5px]">
-					<thead>
-						<tr class="border-b bg-white text-[10px] uppercase tracking-wide text-muted-foreground">
-							<th class="px-3 py-1.5 text-left font-semibold">#</th>
-							<th class="px-3 py-1.5 text-left font-semibold">SKPD</th>
-							<th class="px-3 py-1.5 text-right font-semibold">Capaian</th>
-							<th class="px-3 py-1.5 text-right font-semibold">Keuangan</th>
-							<th class="px-3 py-1.5 text-right font-semibold">Skor</th>
-							<th class="px-3 py-1.5 text-left font-semibold">Kategori</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each perKuadran[pilih] as h (h.no)}
-							<tr class="border-b last:border-0">
-								<td class="tnum px-3 py-1.5 font-semibold text-[color:var(--primary)]">
-									{Math.round(h.peringkat)}
-								</td>
-								<td class="px-3 py-1.5" title={h.skpd}>{h.namaPendek}</td>
-								<td class="tnum px-3 py-1.5 text-right">{num(h.capaian, 2)}%</td>
-								<td class="tnum px-3 py-1.5 text-right">{num(h.keuangan, 2)}%</td>
-								<td class="tnum px-3 py-1.5 text-right font-semibold">{num(h.skor, 2)}</td>
-								<td class="px-3 py-1.5">
-									<span
-										class="inline-block rounded-full px-2 py-0.5 text-[10.5px] font-medium text-white"
-										style="background:{KATEGORI_WARNA[h.kategori]}">{h.kategori}</span
-									>
-								</td>
+				<div class="overflow-x-auto">
+					<table class="w-full min-w-[520px] text-[12.5px]">
+						<thead>
+							<tr class="border-b bg-white text-[10px] uppercase tracking-wide text-muted-foreground">
+								<th class="px-3 py-1.5 text-left font-semibold">#</th>
+								<th class="px-3 py-1.5 text-left font-semibold">SKPD</th>
+								<th class="px-3 py-1.5 text-right font-semibold">Capaian</th>
+								<th class="px-3 py-1.5 text-right font-semibold">Keuangan</th>
+								<th class="px-3 py-1.5 text-right font-semibold">Skor</th>
+								<th class="px-3 py-1.5 text-left font-semibold">Kategori</th>
 							</tr>
-						{:else}
-							<tr><td colspan="6" class="px-3 py-3 text-center text-muted-foreground">Tidak ada SKPD.</td></tr>
-						{/each}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{#each perKuadran[pilih] as h (h.no)}
+								<tr class="border-b last:border-0">
+									<td class="tnum px-3 py-1.5 font-semibold text-[color:var(--primary)]">
+										{Math.round(h.peringkat)}
+									</td>
+									<td class="px-3 py-1.5" title={h.skpd}>{h.namaPendek}</td>
+									<td class="tnum whitespace-nowrap px-3 py-1.5 text-right">{num(h.capaian, 2)}%</td>
+									<td class="tnum whitespace-nowrap px-3 py-1.5 text-right">{num(h.keuangan, 2)}%</td>
+									<td class="tnum px-3 py-1.5 text-right font-semibold">{num(h.skor, 2)}</td>
+									<td class="px-3 py-1.5">
+										<span
+											class="inline-block whitespace-nowrap rounded-full px-2 py-0.5 text-[10.5px] font-medium text-white"
+											style="background:{KATEGORI_WARNA[h.kategori]}">{h.kategori}</span
+										>
+									</td>
+								</tr>
+							{:else}
+								<tr><td colspan="6" class="px-3 py-3 text-center text-muted-foreground">Tidak ada SKPD.</td></tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		{/if}
 

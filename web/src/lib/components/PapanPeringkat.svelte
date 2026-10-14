@@ -1,8 +1,6 @@
 <script>
 	import { Card, CardHeader, CardTitle, CardContent } from '#lib/components/ui/card';
 	import { Input } from '#lib/components/ui/input';
-	import { Badge } from '#lib/components/ui/badge';
-	import Select from '#lib/components/ui/select/select.svelte';
 	import {
 		Table,
 		TableHeader,
@@ -11,30 +9,58 @@
 		TableBody,
 		TableCell
 	} from '#lib/components/ui/table';
-	import { KATEGORI_URUT, KATEGORI_WARNA, INDIKATOR } from '#lib/skoring.js';
+	import { KATEGORI_URUT, KATEGORI_WARNA } from '#lib/skoring.js';
 	import { num } from '#lib/utils.js';
 
 	let { hasil, ringkas } = $props();
 
 	let q = $state('');
-	let tipe = $state('');
-	let urut = $state('peringkat');
 	let aktif = $state(KATEGORI_URUT);
 	let buka = $state([]);
+	let urut = $state({ kolom: 'peringkat', arah: 'naik' });
 
-	const daftarTipe = $derived([...new Set(hasil.map((h) => h.tipe))].sort());
+	// Nilai yang dipakai untuk pengurutan tiap kolom
+	const nilai = {
+		peringkat: (h) => h.peringkat,
+		skpd: (h) => h.namaPendek,
+		skor: (h) => h.skor,
+		kategori: (h) => KATEGORI_URUT.indexOf(h.kategori),
+		hasil: (h) => h.d1,
+		eksekusi: (h) => h.d2,
+		kapasitas: (h) => h.d3
+	};
+	// Arah pertama saat kolom diklik
+	const arahAwal = { peringkat: 'naik', skpd: 'naik', kategori: 'naik', skor: 'turun', hasil: 'turun', eksekusi: 'turun', kapasitas: 'turun' };
+
+	function urutkan(kolom) {
+		if (urut.kolom === kolom) {
+			urut = { kolom, arah: urut.arah === 'naik' ? 'turun' : 'naik' };
+		} else {
+			urut = { kolom, arah: arahAwal[kolom] };
+		}
+	}
+	function arrow(kolom) {
+		return urut.kolom === kolom ? (urut.arah === 'naik' ? '▲' : '▼') : '';
+	}
+	const kelasTh = 'cursor-pointer select-none whitespace-nowrap hover:text-[color:var(--primary)]';
 
 	let baris = $derived.by(() => {
 		const kata = q.trim().toLowerCase();
 		const r = hasil.filter(
 			(h) =>
 				aktif.includes(h.kategori) &&
-				(!tipe || h.tipe === tipe) &&
 				(!kata ||
 					h.skpd.toLowerCase().includes(kata) ||
 					h.namaPendek.toLowerCase().includes(kata))
 		);
-		return [...r].sort((a, b) => (urut === 'skor' ? b.skor - a.skor : a.peringkat - b.peringkat));
+		const f = nilai[urut.kolom];
+		const faktor = urut.arah === 'naik' ? 1 : -1;
+		return [...r].sort((a, b) => {
+			const va = f(a);
+			const vb = f(b);
+			if (typeof va === 'string') return va.localeCompare(vb, 'id') * faktor;
+			return (va - vb) * faktor || a.peringkat - b.peringkat;
+		});
 	});
 
 	function toggle(k) {
@@ -52,7 +78,6 @@
 
 	const warnaDim = { D1: 'var(--dim-hasil)', D2: 'var(--dim-eksekusi)', D3: 'var(--dim-kapasitas)' };
 
-	// Label pendek tiap indikator agar rapi
 	const PENDEK = {
 		capaian: 'Capaian Kinerja',
 		keuangan: 'Realisasi Keuangan',
@@ -61,37 +86,17 @@
 		G: 'Indeks SPBE',
 		H: 'Nilai SAKIP'
 	};
-	// Satuan ringkas agar kartu tetap rapi
 	const UNIT = { capaian: '%', keuangan: '%', E: 'poin', F: 'poin', G: 'skala 0–5', H: '0–100' };
 
-	/** Rincian terkelompok per dimensi untuk panel detail. */
 	function grupDetail(h) {
 		return [
 			{ kode: 'D1', nama: 'Hasil Kinerja', warna: warnaDim.D1, skor: h.d1, maks: 110, keys: ['capaian'] },
-			{
-				kode: 'D2',
-				nama: 'Eksekusi Anggaran',
-				warna: warnaDim.D2,
-				skor: h.d2,
-				maks: 100,
-				keys: ['keuangan']
-			},
-			{
-				kode: 'D3',
-				nama: 'Kapasitas & Tata Kelola',
-				warna: warnaDim.D3,
-				skor: h.d3,
-				maks: 100,
-				keys: ['E', 'F', 'G', 'H']
-			}
+			{ kode: 'D2', nama: 'Eksekusi Anggaran', warna: warnaDim.D2, skor: h.d2, maks: 100, keys: ['keuangan'] },
+			{ kode: 'D3', nama: 'Kapasitas & Tata Kelola', warna: warnaDim.D3, skor: h.d3, maks: 100, keys: ['E', 'F', 'G', 'H'] }
 		];
 	}
-	function nilaiAsli(h, key) {
-		return h[key];
-	}
-	function nilaiSkor(h, key) {
-		return h.s[key];
-	}
+	const nilaiAsli = (h, key) => h[key];
+	const nilaiSkor = (h, key) => h.s[key];
 </script>
 
 <Card class="break-inside-avoid">
@@ -101,19 +106,6 @@
 	<CardContent>
 		<div class="no-print mb-3 flex flex-wrap items-center gap-2">
 			<Input class="h-9 min-w-[200px] flex-1" placeholder="Cari SKPD..." bind:value={q} />
-			<Select bind:value={tipe}>
-				<option value="">Semua jenis</option>
-				{#each daftarTipe as t (t)}
-					<option value={t}>{t}</option>
-				{/each}
-			</Select>
-			<Select bind:value={urut}>
-				<option value="peringkat">Urut: Peringkat</option>
-				<option value="skor">Urut: Skor</option>
-			</Select>
-		</div>
-
-		<div class="no-print mb-3 flex flex-wrap gap-1.5">
 			{#each KATEGORI_URUT as k (k)}
 				<button
 					type="button"
@@ -136,20 +128,48 @@
 			</button>
 		</div>
 
-		<div class="print-full max-h-[640px] overflow-auto rounded-md border">
-			<Table>
+		<div class="print-full max-h-[470px] min-w-0 overflow-auto rounded-md border">
+			<Table class="text-[13px]">
 				<TableHeader class="sticky top-0 z-10 bg-white">
 					<TableRow class="hover:bg-white">
-						<TableHead rowspan="2" class="w-9 align-middle">#</TableHead>
-						<TableHead rowspan="2" class="align-middle">SKPD</TableHead>
-						<TableHead rowspan="2" class="text-right align-middle">Skor</TableHead>
-						<TableHead rowspan="2" class="align-middle">Kategori</TableHead>
-						<TableHead colspan="3" class="border-b text-center">Dimensi (nilai 0–100)</TableHead>
+						<TableHead rowspan="2" class="w-[74px] align-middle">
+							<button type="button" class={kelasTh} onclick={() => urutkan('peringkat')}>
+								Peringkat {arrow('peringkat')}
+							</button>
+						</TableHead>
+						<TableHead rowspan="2" class="align-middle">
+							<button type="button" class={kelasTh} onclick={() => urutkan('skpd')}>
+								SKPD {arrow('skpd')}
+							</button>
+						</TableHead>
+						<TableHead rowspan="2" class="text-right align-middle">
+							<button type="button" class={kelasTh} onclick={() => urutkan('skor')}>
+								Skor {arrow('skor')}
+							</button>
+						</TableHead>
+						<TableHead rowspan="2" class="align-middle">
+							<button type="button" class={kelasTh} onclick={() => urutkan('kategori')}>
+								Kategori {arrow('kategori')}
+							</button>
+						</TableHead>
+						<TableHead colspan="3" class="border-b text-center">Skor Dimensi (0–100)</TableHead>
 					</TableRow>
 					<TableRow class="hover:bg-white">
-						<TableHead class="text-center">Hasil</TableHead>
-						<TableHead class="text-center">Eksekusi</TableHead>
-						<TableHead class="text-center">Kapasitas</TableHead>
+						<TableHead class="text-center">
+							<button type="button" class={kelasTh} onclick={() => urutkan('hasil')}>
+								Hasil {arrow('hasil')}
+							</button>
+						</TableHead>
+						<TableHead class="text-center">
+							<button type="button" class={kelasTh} onclick={() => urutkan('eksekusi')}>
+								Eksekusi {arrow('eksekusi')}
+							</button>
+						</TableHead>
+						<TableHead class="text-center">
+							<button type="button" class={kelasTh} onclick={() => urutkan('kapasitas')}>
+								Kapasitas {arrow('kapasitas')}
+							</button>
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -166,7 +186,7 @@
 										>seri</span
 									>{/if}</TableCell
 							>
-							<TableCell class="max-w-[380px]">
+							<TableCell class="max-w-[210px]">
 								<div class="flex items-center gap-1.5">
 									<svg
 										class="h-3 w-3 shrink-0 text-muted-foreground transition-transform {terbuka
@@ -183,13 +203,6 @@
 									</svg>
 									<div class="truncate" title={h.skpd}>{h.namaPendek}</div>
 								</div>
-								{#if h.capaianNol}
-									<Badge
-										variant="outline"
-										class="mt-1 border-[color:var(--kat-kurang)]/40 bg-[color:var(--kat-kurang)]/10 text-[10px] text-[color:var(--kat-kurang)]"
-										>capaian 0</Badge
-									>
-								{/if}
 							</TableCell>
 							<TableCell class="tnum text-right font-bold">{num(h.skor, 2)}</TableCell>
 							<TableCell>
@@ -200,9 +213,9 @@
 							</TableCell>
 							{#each grupDetail(h) as d (d.kode)}
 								<TableCell>
-									<div class="flex flex-col items-center gap-1">
-										<span class="tnum text-[13px] font-semibold">{num(d.skor, 2)}</span>
-										<span class="h-1.5 w-full max-w-[54px] overflow-hidden rounded-full bg-[#e6edf6]">
+									<div class="flex items-center justify-center gap-1.5">
+										<span class="tnum w-8 text-right text-[12.5px] font-semibold">{num(d.skor, 2)}</span>
+										<span class="h-1.5 w-7 shrink-0 overflow-hidden rounded-full bg-[#e6edf6]">
 											<span
 												class="block h-full rounded-full"
 												style="width:{lebar(d.skor, d.maks)}%;background:{d.warna}"
@@ -217,7 +230,6 @@
 							<TableRow class="hover:bg-transparent">
 								<TableCell colspan="7" class="p-0">
 									<div class="border-l-4 bg-[color:var(--muted)]/70 p-4" style="border-color:var(--primary)">
-										<!-- Kepala rincian -->
 										<div class="mb-3 flex flex-wrap items-center justify-between gap-2">
 											<div>
 												<div class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
@@ -234,13 +246,11 @@
 												</div>
 												<span
 													class="rounded-full px-3 py-1 text-xs font-semibold text-white"
-													style="background:{KATEGORI_WARNA[h.kategori]}"
-													>{h.kategori}</span
+													style="background:{KATEGORI_WARNA[h.kategori]}">{h.kategori}</span
 												>
 											</div>
 										</div>
 
-										<!-- Tiga kelompok dimensi -->
 										<div class="grid gap-3 md:grid-cols-3">
 											{#each grupDetail(h) as d (d.kode)}
 												<div class="flex flex-col rounded-lg border bg-white p-3">
@@ -305,7 +315,7 @@
 			<span class="flex items-center gap-1.5"
 				><i class="inline-block h-2.5 w-2.5 rounded-sm bg-[color:var(--dim-kapasitas)]"></i>Kapasitas</span
 			>
-			<span class="no-print">· klik baris untuk melihat rincian indikator</span>
+			<span class="no-print">· klik judul kolom untuk mengurutkan · klik baris untuk rincian</span>
 		</div>
 	</CardContent>
 </Card>

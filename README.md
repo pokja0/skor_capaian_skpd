@@ -95,6 +95,6 @@ Sulawesi Barat*, dan tagline **"Sulbar Maju dan Sejahtera"**.
 - 6 indikator → 3 dimensi (Hasil, Eksekusi, Kapasitas), bobot dimensi setara 33,3%.
 - Normalisasi **absolut berbasis target** (skor tidak bergantung peserta lain).
 - Agregasi **geometrik** `∛(D1 × D2 × D3)` → non-kompensatoris (capaian 0 ⇒ skor 0).
-- Kategori ambang absolut: ≥70 Sangat Baik · 60–70 Baik · 45–60 Cukup · <45 Kurang · =0 Capaian 0.
+- Kategori ambang absolut: ≥70 Sangat Baik · 60–70 Baik · 45–60 Cukup · <45 Kurang · =0 Skor 0.
 
 Rincian lengkap: [`docs/METODOLOGI.md`](docs/METODOLOGI.md).

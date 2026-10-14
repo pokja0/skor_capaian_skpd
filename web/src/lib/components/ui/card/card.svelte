@@ -5,7 +5,10 @@
 
 <div
 	data-slot="card"
-	class={cn('bg-card text-card-foreground flex flex-col gap-5 rounded-xl border py-5 shadow-sm', className)}
+	class={cn(
+		'bg-card text-card-foreground flex min-w-0 flex-col gap-5 rounded-xl border py-5 shadow-sm',
+		className
+	)}
 	{...rest}
 >
 	{@render children?.()}

@@ -10,7 +10,7 @@
 		KATEGORI_URUT,
 		KATEGORI_WARNA
 	} from '#lib/skoring.js';
-	import { unduhXlsx, cetakPdf } from '#lib/ekspor.js';
+	import { unduhXlsx, unduhPdf } from '#lib/ekspor.js';
 	import { num } from '#lib/utils.js';
 
 	import { Button } from '#lib/components/ui/button';
@@ -69,10 +69,8 @@
 	async function onPdf() {
 		if (proses) return; // cegah klik berulang
 		proses = 'pdf';
-		// beri kesempatan UI memperlihatkan status sebelum dialog cetak (memblokir)
-		await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 		try {
-			cetakPdf();
+			await unduhPdf({ hasil, ringkas, xBar, yBar });
 		} finally {
 			proses = null;
 		}
@@ -84,29 +82,33 @@
 	<meta name="description" content="Penilaian kinerja perangkat daerah untuk pimpinan" />
 </svelte:head>
 
-<div class="mx-auto max-w-[1240px] px-4 py-6 sm:px-6">
+<div class="mx-auto max-w-[1240px] px-4 py-6 sm:px-6" data-laporan>
 	<!-- Header / identitas -->
 	<header
 		class="overflow-hidden rounded-2xl bg-gradient-to-br from-[#17365d] to-[#1f4e79] text-white shadow-lg print:shadow-none"
 	>
-		<div class="flex flex-wrap items-start justify-between gap-4 px-6 pt-5">
-			<div class="flex items-center gap-4">
+		<div class="flex flex-wrap items-start justify-between gap-4 px-5 pt-5 sm:px-6">
+			<div class="flex min-w-0 items-center gap-3 sm:gap-4">
 				<img
 					src="/lambang-sulbar.svg"
 					alt="Lambang Provinsi Sulawesi Barat"
-					class="h-16 w-auto shrink-0 drop-shadow-md sm:h-20"
+					class="h-14 w-auto shrink-0 drop-shadow-md sm:h-20"
 				/>
-				<div>
-					<p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/80">
+				<div class="min-w-0">
+					<p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/80 sm:text-[11px]">
 						Pemerintah Provinsi Sulawesi Barat
 					</p>
-					<h1 class="mt-0.5 text-xl font-bold sm:text-2xl">Penilaian Kinerja SKPD</h1>
+					<h1 class="mt-0.5 text-lg font-bold leading-tight sm:text-2xl">Penilaian Kinerja SKPD</h1>
 					<p class="mt-0.5 text-sm opacity-90">Capaian Kinerja Triwulan III</p>
-					<div class="mt-3 flex flex-wrap gap-2">
-						<Badge class="border border-white/30 bg-white/15 text-white" variant="outline"
-							>Metode: Indeks Komposit Non-Kompensatoris</Badge
+					<div class="mt-3 flex flex-wrap gap-1.5 sm:gap-2">
+						<Badge
+							class="max-w-full border border-white/30 bg-white/15 text-[10px] leading-tight text-white sm:text-xs"
+							variant="outline">Metode: Indeks Komposit Non-Kompensatoris</Badge
 						>
-						<Badge class="border border-white/30 bg-white/15 text-white" variant="outline">Skala 0–100</Badge>
+						<Badge
+							class="max-w-full border border-white/30 bg-white/15 text-[10px] leading-tight text-white sm:text-xs"
+							variant="outline">Skala 0–100</Badge
+						>
 					</div>
 				</div>
 			</div>
@@ -172,23 +174,25 @@
 				</Button>
 			</div>
 		</div>
-		<div class="mt-4 border-t border-white/15 bg-white/5 px-6 py-2 text-center">
-			<span class="text-sm font-semibold italic tracking-wide">“Sulbar Maju dan Sejahtera”</span>
+		<div class="mt-4 border-t border-white/15 bg-white/5 px-5 py-2 text-center sm:px-6">
+			<span class="text-xs font-semibold italic tracking-wide sm:text-sm"
+				>“Sulbar Maju dan Sejahtera”</span
+			>
 		</div>
 	</header>
 
 	<!-- Podium + Ringkasan & Insight -->
-	<section class="mt-4 grid items-start gap-4 lg:grid-cols-2">
+	<section class="mt-4 grid gap-4 lg:grid-cols-2">
 		<Podium tiga={top3} />
 		<RingkasanInsight {hasil} {ringkas} />
 	</section>
 
 	<!-- Papan peringkat + sisi kanan -->
-	<section class="mt-4 grid items-start gap-4 lg:grid-cols-[1.75fr_1fr]">
+	<section class="mt-4 grid gap-4 xl:grid-cols-[2.2fr_1fr]">
 		<PapanPeringkat {hasil} {ringkas} />
-		<div class="grid gap-4">
+		<div class="flex min-w-0 flex-col gap-4">
 			<DonutKategori data={donut} />
-			<div class="grid gap-2.5">
+			<div class="flex flex-1 flex-col justify-between gap-2.5">
 				<KartuAlert tone="prioritas" judul="Prioritas">
 					{#if capaianNol.length}
 						<b>{capaianNol.length} SKPD</b> bercapaian kinerja <b>0</b> sehingga berskor 0 — perlu
@@ -293,13 +297,13 @@
 	</section>
 
 	<!-- Lampiran: muncul hanya saat dicetak / diunduh PDF -->
-	<section class="mt-4 hidden print:block print-break">
+	<section class="mt-4 hidden print:block pdf-tampil print-break">
 		<h2 class="mb-2 text-base font-semibold text-[color:var(--primary)]">Lampiran — Data Lengkap</h2>
 		<p class="mb-2 text-[11px] text-muted-foreground">
 			Seluruh nilai asli indikator, skor tiap dimensi, dan kuadran Kinerja vs Anggaran. Garis pembagi kuadran:
 			capaian <b>{num(yBar, 2)}%</b> dan penyerapan <b>{num(xBar, 2)}%</b>.
 		</p>
-		<table class="w-full border-collapse text-[9px]">
+		<table class="lampiran-tabel w-full border-collapse text-[9px]">
 			<thead>
 				<tr class="bg-[color:var(--primary)] text-white">
 					<th rowspan="2" class="border px-1 py-1">#</th>

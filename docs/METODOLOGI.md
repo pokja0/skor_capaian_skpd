@@ -8,7 +8,7 @@ hasil validasi dan keterbatasannya. Seluruh angka berasal dari `data/Capaian OPD
 - **35 SKPD** dinilai, skala **0–100**.
 - Indikator: **6** (semua berarah *benefit* — makin tinggi makin baik).
 - Skor tertinggi **78,84**; median **57,31**; rata-rata **49,85**.
-- Kategori: Sangat Baik **11**, Baik **4**, Cukup **10**, Kurang **4**, Capaian 0 **6**.
+- Kategori: Sangat Baik **11**, Baik **4**, Cukup **10**, Kurang **4**, Skor 0 **6**.
 - Enam SKPD bercapaian kinerja 0 memperoleh skor **0** (aturan non-kompensatoris).
 
 ## 2. Data dan indikator
@@ -122,7 +122,7 @@ menghasilkan kategori bagus:
 | Baik | 60 – <70 | 4 |
 | Cukup | 45 – <60 | 10 |
 | Kurang | >0 – <45 | 4 |
-| Capaian 0 | = 0 | 6 |
+| Skor 0 | = 0 | 6 |
 
 Pembenaran: ketiga ambang berada di **celah alami** data (tidak ada SKPD pada 64,23–70,02;
 59,20–61,36; 39,15–48,90), sehingga menggeser ambang sedikit tidak mengubah hasil. Uji

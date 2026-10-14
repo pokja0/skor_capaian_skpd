@@ -11,12 +11,11 @@
 		const rE = rata('d2');
 		const rK = rata('d3');
 
-		// kelompok yang paling tertinggal
 		const perTipe = {};
 		const totalTipe = {};
 		for (const h of hasil) totalTipe[h.tipe] = (totalTipe[h.tipe] || 0) + 1;
 		for (const h of hasil) {
-			if (h.kategori === 'Cukup' || h.kategori === 'Kurang' || h.kategori === 'Capaian 0')
+			if (h.kategori === 'Cukup' || h.kategori === 'Kurang' || h.kategori === 'Skor 0')
 				perTipe[h.tipe] = (perTipe[h.tipe] || 0) + 1;
 		}
 		let tipeTerburuk = null;
@@ -26,16 +25,7 @@
 			if (!tipeTerburuk || rasio > tipeTerburuk.rasio)
 				tipeTerburuk = { tipe: t, jumlah: perTipe[t] || 0, total: totalTipe[t], rasio };
 		}
-
-		// serapan tinggi tetapi capaian rendah kini disajikan pada grafik "Kinerja vs Anggaran"
-		return {
-			rH,
-			rE,
-			rK,
-			tipeTerburuk,
-			rentangBawah: ringkas.skorMin,
-			rentangAtas: ringkas.skorMax
-		};
+		return { rH, rE, rK, tipeTerburuk };
 	});
 </script>
 
@@ -44,40 +34,61 @@
 		<CardTitle class="text-base text-[color:var(--primary)]">Ringkasan &amp; Insight</CardTitle>
 	</CardHeader>
 	<CardContent>
-		<!-- Angka kunci (tidak ditampilkan di bagian lain) -->
-		<div class="grid grid-cols-3 divide-x rounded-lg border bg-[color:var(--muted)]/60">
-			<div class="px-3 py-2.5 text-center">
-				<div class="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Rata-rata</div>
-				<div class="tnum text-xl font-bold text-[color:var(--primary)]">{num(ringkas.skorRata, 2)}</div>
+		<!-- Tiga angka kunci -->
+		<div class="grid grid-cols-3 gap-2 sm:gap-3">
+			<div
+				class="rounded-xl border border-t-4 border-t-[color:var(--dim-hasil)] bg-white px-2 py-3 text-center shadow-sm sm:px-3"
+			>
+				<div class="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:text-[11px]">
+					Rata-rata
+				</div>
+				<div class="tnum mt-1 text-base font-extrabold leading-none text-[color:var(--primary)] sm:text-2xl">
+					{num(ringkas.skorRata, 2)}
+				</div>
 			</div>
-			<div class="px-3 py-2.5 text-center">
-				<div class="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Median</div>
-				<div class="tnum text-xl font-bold text-[color:var(--primary)]">{num(ringkas.skorMedian, 2)}</div>
+			<div
+				class="rounded-xl border border-t-4 border-t-[color:var(--dim-eksekusi)] bg-white px-2 py-3 text-center shadow-sm sm:px-3"
+			>
+				<div class="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:text-[11px]">
+					Median
+				</div>
+				<div class="tnum mt-1 text-base font-extrabold leading-none text-[color:var(--primary)] sm:text-2xl">
+					{num(ringkas.skorMedian, 2)}
+				</div>
 			</div>
-			<div class="px-3 py-2.5 text-center">
-				<div class="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Rentang</div>
-				<div class="tnum text-xl font-bold text-[color:var(--primary)]">
-					{num(info.rentangBawah, 2)}–{num(info.rentangAtas, 2)}
+			<div
+				class="rounded-xl border border-t-4 border-t-[color:var(--dim-kapasitas)] bg-white px-2 py-3 text-center shadow-sm sm:px-3"
+			>
+				<div class="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:text-[11px]">
+					Rentang
+				</div>
+				<div class="tnum mt-1 whitespace-nowrap text-[13px] font-extrabold leading-none text-[color:var(--primary)] sm:text-xl">
+					{num(ringkas.skorMin, 2)}–{num(ringkas.skorMax, 2)}
 				</div>
 			</div>
 		</div>
 
 		<!-- Analisis -->
-		<ul class="mt-4 space-y-2.5 text-[13.5px] leading-relaxed text-[#33475b]">
-			<li class="flex gap-2">
-				<span class="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--primary)]"></span>
-				<span>
-					Dimensi <b>Hasil Kinerja</b> adalah yang terlemah secara rata-rata
-					(<b class="tnum">{num(info.rH, 2)}</b>), di bawah Eksekusi (<span class="tnum"
-						>{num(info.rE, 2)}</span
-					>) dan Kapasitas (<span class="tnum">{num(info.rK, 2)}</span>). Perbaikan pada capaian kinerja
-					berdampak paling besar terhadap skor.
+		<ul class="mt-4 space-y-3">
+			<li class="flex gap-2.5">
+				<span
+					class="mt-[2px] grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[color:var(--dim-hasil)]/12 text-[11px] font-bold text-[color:var(--dim-hasil)]"
+					>1</span
+				>
+				<span class="text-[13px] leading-relaxed text-[#33475b] sm:text-[13.5px]">
+					Dimensi <b>Hasil Kinerja</b> paling lemah secara rata-rata (<b class="tnum"
+						>{num(info.rH, 2)}</b
+					>), di bawah Eksekusi (<span class="tnum">{num(info.rE, 2)}</span>) dan Kapasitas
+					(<span class="tnum">{num(info.rK, 2)}</span>). Perbaikan capaian kinerja berdampak paling besar.
 				</span>
 			</li>
 			{#if info.tipeTerburuk}
-				<li class="flex gap-2">
-					<span class="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--primary)]"></span>
-					<span>
+				<li class="flex gap-2.5">
+					<span
+						class="mt-[2px] grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[color:var(--kat-cukup)]/20 text-[11px] font-bold text-[#b97e00]"
+						>2</span
+					>
+					<span class="text-[13px] leading-relaxed text-[#33475b] sm:text-[13.5px]">
 						Kelompok <b>{info.tipeTerburuk.tipe}</b> paling tertinggal: <b class="tnum"
 							>{info.tipeTerburuk.jumlah} dari {info.tipeTerburuk.total}</b
 						> unitnya berkinerja Cukup atau lebih rendah.

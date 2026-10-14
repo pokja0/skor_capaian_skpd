@@ -24,14 +24,14 @@ export const DIMENSI = [
 	{ kode: 'D3', nama: 'Kapasitas & Tata Kelola', keys: ['E', 'F', 'G', 'H'], warna: 'var(--dim-kapasitas)' }
 ];
 
-export const KATEGORI_URUT = ['Sangat Baik', 'Baik', 'Cukup', 'Kurang', 'Capaian 0'];
+export const KATEGORI_URUT = ['Sangat Baik', 'Baik', 'Cukup', 'Kurang', 'Skor 0'];
 
 export const KATEGORI_WARNA = {
 	'Sangat Baik': 'var(--kat-sangat-baik)',
 	Baik: 'var(--kat-baik)',
 	Cukup: 'var(--kat-cukup)',
 	Kurang: 'var(--kat-kurang)',
-	'Capaian 0': 'var(--kat-nol)'
+	'Skor 0': 'var(--kat-nol)'
 };
 
 // --- Normalisasi absolut berbasis target ----------------------------------
@@ -65,7 +65,7 @@ export function beriPeringkat(skorArr) {
 }
 
 export function kategoriDari(skor, capaianNol) {
-	if (capaianNol) return 'Capaian 0';
+	if (capaianNol) return 'Skor 0';
 	if (skor >= 70) return 'Sangat Baik';
 	if (skor >= 60) return 'Baik';
 	if (skor >= 45) return 'Cukup';
@@ -132,7 +132,7 @@ export function ringkas(hasil) {
 		juara,
 		kategori,
 		baik: (kategori['Sangat Baik'] || 0) + (kategori['Baik'] || 0),
-		perhatian: (kategori['Kurang'] || 0) + (kategori['Capaian 0'] || 0)
+		perhatian: (kategori['Kurang'] || 0) + (kategori['Skor 0'] || 0)
 	};
 }
 
@@ -187,10 +187,10 @@ export function tipeSKPD(nama) {
 
 // --- Kuadran Kinerja vs Anggaran ------------------------------------------
 export const KUADRAN = {
-	kananAtas: { label: 'Optimal', ket: 'Capaian & serapan tinggi', warna: 'var(--dim-eksekusi)' },
-	kananBawah: { label: 'Telusuri', ket: 'Serapan tinggi, capaian rendah', warna: 'var(--kat-kurang)' },
-	kiriAtas: { label: 'Efisien', ket: 'Capaian tinggi, serapan hemat', warna: 'var(--dim-hasil)' },
-	kiriBawah: { label: 'Perlu perhatian', ket: 'Capaian & serapan rendah', warna: 'var(--kat-cukup)' }
+	kananAtas: { label: 'Optimal', ket: 'Capaian & serapan tinggi', warna: 'var(--dim-eksekusi)', bg: '#eef6f3' },
+	kananBawah: { label: 'Telusuri', ket: 'Serapan tinggi, capaian rendah', warna: 'var(--kat-kurang)', bg: '#fdf0f1' },
+	kiriAtas: { label: 'Efisien', ket: 'Capaian tinggi, serapan hemat', warna: 'var(--dim-hasil)', bg: '#eef4fb' },
+	kiriBawah: { label: 'Perlu perhatian', ket: 'Capaian & serapan rendah', warna: 'var(--kat-cukup)', bg: '#fdf6ea' }
 };
 
 export const KUADRAN_URUT = ['kananAtas', 'kananBawah', 'kiriAtas', 'kiriBawah'];
