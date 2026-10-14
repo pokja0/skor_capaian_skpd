@@ -1,0 +1,139 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------------
+   Tema (token shadcn-svelte) — disetel ke nuansa kebiruan pemerintahan.
+--------------------------------------------------------------------------- */
+:root {
+	--radius: 0.7rem;
+
+	--background: #eef2f7;
+	--foreground: #14202e;
+
+	--card: #ffffff;
+	--card-foreground: #14202e;
+
+	--popover: #ffffff;
+	--popover-foreground: #14202e;
+
+	--primary: #17365d;
+	--primary-foreground: #ffffff;
+
+	--secondary: #e3ebf5;
+	--secondary-foreground: #17365d;
+
+	--muted: #eef2f7;
+	--muted-foreground: #5b6b7c;
+
+	--accent: #e3ebf5;
+	--accent-foreground: #17365d;
+
+	--destructive: #d1495b;
+	--destructive-foreground: #ffffff;
+
+	--border: #dde5ee;
+	--input: #dde5ee;
+	--ring: #2e6fb7;
+
+	/* warna kategori kinerja */
+	--kat-sangat-baik: #1a7f37;
+	--kat-baik: #43a047;
+	--kat-cukup: #e8a020;
+	--kat-kurang: #d1495b;
+	--kat-nol: #6b7280;
+
+	/* dimensi */
+	--dim-hasil: #2e6fb7;
+	--dim-eksekusi: #2f9e7a;
+	--dim-kapasitas: #8a6fd1;
+}
+
+@theme inline {
+	--radius-sm: calc(var(--radius) - 4px);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 4px);
+
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+
+	--color-sangat-baik: var(--kat-sangat-baik);
+	--color-baik: var(--kat-baik);
+	--color-cukup: var(--kat-cukup);
+	--color-kurang: var(--kat-kurang);
+	--color-nol: var(--kat-nol);
+	--color-dim-hasil: var(--dim-hasil);
+	--color-dim-eksekusi: var(--dim-eksekusi);
+	--color-dim-kapasitas: var(--dim-kapasitas);
+}
+
+@layer base {
+	* {
+		border-color: var(--border);
+	}
+	body {
+		background-color: var(--background);
+		color: var(--foreground);
+		font-family:
+			'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial,
+			sans-serif;
+		-webkit-font-smoothing: antialiased;
+	}
+}
+
+/* Angka skor rata kanan supaya mudah dibandingkan */
+.tnum {
+	font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+   Cetak / Simpan sebagai PDF
+--------------------------------------------------------------------------- */
+@media print {
+	@page {
+		size: A4;
+		margin: 12mm;
+	}
+	/* Pertahankan warna latar (lambang, header, label kategori) saat dicetak */
+	* {
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+	}
+	.no-print {
+		display: none !important;
+	}
+	body {
+		background: #ffffff;
+	}
+	.print-full {
+		max-height: none !important;
+		overflow: visible !important;
+	}
+	.card,
+	[data-slot='card'] {
+		box-shadow: none !important;
+		break-inside: avoid;
+	}
+	.print-break {
+		break-before: page;
+	}
+}

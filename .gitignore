@@ -1,0 +1,7 @@
+node_modules/
+web/node_modules/
+web/.svelte-kit/
+web/build/
+.vercel/
+.DS_Store
+*.log

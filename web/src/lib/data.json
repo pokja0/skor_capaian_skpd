@@ -1,0 +1,358 @@
+{
+  "sumber": "data/Capaian OPD.xlsx",
+  "sheet": "Capaian Triwulan III",
+  "diimpor": "2026-10-14T19:33:38.835Z",
+  "jumlah": 35,
+  "skpd": [
+    {
+      "no": 1,
+      "skpd": "Dinas Pendidikan dan Kebudayaan Daerah",
+      "capaian": 45.84,
+      "keuangan": 70.8,
+      "E": 102,
+      "F": 36,
+      "G": 3.4,
+      "H": 78.68
+    },
+    {
+      "no": 2,
+      "skpd": "Dinas Kesehatan, Pengendalian Penduduk dan Keluarga Berencana Daerah",
+      "capaian": 80.73,
+      "keuangan": 73.72,
+      "E": 99,
+      "F": 40,
+      "G": 3.8,
+      "H": 79.66
+    },
+    {
+      "no": 3,
+      "skpd": "Rumah Sakit Umum Daerah",
+      "capaian": 108.44,
+      "keuangan": 49.2,
+      "E": 108,
+      "F": 40,
+      "G": 4.7,
+      "H": 74.81
+    },
+    {
+      "no": 4,
+      "skpd": "Dinas Pekerjaan Umum dan Penataan Ruang Daerah",
+      "capaian": 38.91,
+      "keuangan": 18.42,
+      "E": 108,
+      "F": 41,
+      "G": 3.7,
+      "H": 80.14
+    },
+    {
+      "no": 5,
+      "skpd": "Dinas Perumahan Rakyat, Kawasan Permukiman, Pertanahan dan Perhubungan Daerah",
+      "capaian": 32.48,
+      "keuangan": 47.91,
+      "E": 100,
+      "F": 42,
+      "G": 4.1,
+      "H": 76.5
+    },
+    {
+      "no": 6,
+      "skpd": "Satuan Polisi Pamong Praja dan Pemadam Kebakaran Daerah",
+      "capaian": 81.1,
+      "keuangan": 73.05,
+      "E": 42,
+      "F": 40,
+      "G": 4.1,
+      "H": 76.7
+    },
+    {
+      "no": 7,
+      "skpd": "Badan Penanggulangan Bencana Daerah",
+      "capaian": 33.42,
+      "keuangan": 76.28,
+      "E": 85,
+      "F": 38,
+      "G": 3.8,
+      "H": 74.75
+    },
+    {
+      "no": 8,
+      "skpd": "Dinas Sosial, Pemberdayaan Perempuan dan Perlindungan Anak serta Pemberdayaan Masyarakat dan Desa Daerah",
+      "capaian": 90.09,
+      "keuangan": 53.98,
+      "E": 87,
+      "F": 41,
+      "G": 3.9,
+      "H": 76.41
+    },
+    {
+      "no": 9,
+      "skpd": "Dinas Transmigrasi dan Tenaga Kerja Daerah",
+      "capaian": 0,
+      "keuangan": 22.16,
+      "E": 105,
+      "F": 43,
+      "G": 2.2,
+      "H": 76.46
+    },
+    {
+      "no": 10,
+      "skpd": "Dinas Pangan Daerah",
+      "capaian": 0,
+      "keuangan": 67.96,
+      "E": 100,
+      "F": 43,
+      "G": 3.7,
+      "H": 75.59
+    },
+    {
+      "no": 11,
+      "skpd": "Dinas Kependudukan dan Pencatatan Sipil Daerah",
+      "capaian": 54.42,
+      "keuangan": 72.07,
+      "E": 82,
+      "F": 34,
+      "G": 3.2,
+      "H": 77.04
+    },
+    {
+      "no": 12,
+      "skpd": "Dinas Komunikasi, Informatika, Statistik dan Persandian Daerah",
+      "capaian": 41.7,
+      "keuangan": 66.57,
+      "E": 80,
+      "F": 38,
+      "G": 5,
+      "H": 78.12
+    },
+    {
+      "no": 13,
+      "skpd": "Dinas Koperasi dan UKM, Perindustrian dan Perdagangan Daerah",
+      "capaian": 4.13,
+      "keuangan": 30.35,
+      "E": 83,
+      "F": 42,
+      "G": 4.1,
+      "H": 77.62
+    },
+    {
+      "no": 14,
+      "skpd": "Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu Daerah",
+      "capaian": 72.46,
+      "keuangan": 70.44,
+      "E": 92,
+      "F": 40,
+      "G": 4.7,
+      "H": 80.25
+    },
+    {
+      "no": 15,
+      "skpd": "Dinas Kepemudaan, Olahraga, Pariwisata dan Ekonomi Kreatif Daerah",
+      "capaian": 42.36,
+      "keuangan": 61.69,
+      "E": 88,
+      "F": 40,
+      "G": 3.7,
+      "H": 77.13
+    },
+    {
+      "no": 16,
+      "skpd": "Dinas Perpustakaan dan Kearsipan Daerah",
+      "capaian": 66.53,
+      "keuangan": 76.05,
+      "E": 102,
+      "F": 39,
+      "G": 5,
+      "H": 75.45
+    },
+    {
+      "no": 17,
+      "skpd": "Dinas Kelautan dan Perikanan Daerah",
+      "capaian": 58.29,
+      "keuangan": 32.84,
+      "E": 100,
+      "F": 39,
+      "G": 3.2,
+      "H": 80.07
+    },
+    {
+      "no": 18,
+      "skpd": "Dinas Tanaman Pangan, Hortikultura dan Peternakan Daerah",
+      "capaian": 116.05,
+      "keuangan": 56.97,
+      "E": 99,
+      "F": 42,
+      "G": 4.7,
+      "H": 77.82
+    },
+    {
+      "no": 19,
+      "skpd": "Dinas Perkebunan Daerah",
+      "capaian": 41.93,
+      "keuangan": 65.67,
+      "E": 88,
+      "F": 42,
+      "G": 4.7,
+      "H": 77.42
+    },
+    {
+      "no": 20,
+      "skpd": "Dinas Lingkungan Hidup dan Kehutanan Daerah",
+      "capaian": 0,
+      "keuangan": 71.09,
+      "E": 92,
+      "F": 39,
+      "G": 3.8,
+      "H": 76.09
+    },
+    {
+      "no": 21,
+      "skpd": "Dinas Energi dan Sumber Daya Mineral Daerah",
+      "capaian": 71.09,
+      "keuangan": 71.85,
+      "E": 91,
+      "F": 39,
+      "G": 5,
+      "H": 78.35
+    },
+    {
+      "no": 22,
+      "skpd": "Biro Umum",
+      "capaian": 61,
+      "keuangan": 62,
+      "E": 92,
+      "F": 42,
+      "G": 3.1,
+      "H": 78.98
+    },
+    {
+      "no": 23,
+      "skpd": "Biro Organisasi",
+      "capaian": 0,
+      "keuangan": 57,
+      "E": 83,
+      "F": 42,
+      "G": 4.7,
+      "H": 80.21
+    },
+    {
+      "no": 24,
+      "skpd": "Biro Pemerintahan dan Kesejahteraan Rakyat",
+      "capaian": 68,
+      "keuangan": 30.7,
+      "E": 85,
+      "F": 39,
+      "G": 3.7,
+      "H": 74.89
+    },
+    {
+      "no": 25,
+      "skpd": "Biro Hukum",
+      "capaian": 36,
+      "keuangan": 59,
+      "E": 93,
+      "F": 42,
+      "G": 5,
+      "H": 79.15
+    },
+    {
+      "no": 26,
+      "skpd": "Biro Perekonomian dan Administrasi Pembangunan",
+      "capaian": 46.5,
+      "keuangan": 56.4,
+      "E": 84,
+      "F": 43,
+      "G": 4.1,
+      "H": 78.13
+    },
+    {
+      "no": 27,
+      "skpd": "Biro Pengadaan Barang dan Jasa",
+      "capaian": 0,
+      "keuangan": 62,
+      "E": 88,
+      "F": 40,
+      "G": 4,
+      "H": 78.21
+    },
+    {
+      "no": 28,
+      "skpd": "Sekretariat Dewan Perwakilan Rakyat Daerah",
+      "capaian": 86.71,
+      "keuangan": 60.23,
+      "E": 83,
+      "F": 38,
+      "G": 3.5,
+      "H": 78.05
+    },
+    {
+      "no": 29,
+      "skpd": "Badan Perencanaan Pembangunan, Riset dan Inovasi Daerah",
+      "capaian": 47.03,
+      "keuangan": 68.25,
+      "E": 108,
+      "F": 42,
+      "G": 5,
+      "H": 80.26
+    },
+    {
+      "no": 30,
+      "skpd": "Badan Pengelolaan Keuangan dan Aset Daerah",
+      "capaian": 7.73,
+      "keuangan": 55.7,
+      "E": 94,
+      "F": 39,
+      "G": 4.1,
+      "H": 80.06
+    },
+    {
+      "no": 31,
+      "skpd": "Badan Pendapatan Daerah",
+      "capaian": 82.56,
+      "keuangan": 76.78,
+      "E": 108,
+      "F": 36,
+      "G": 3.8,
+      "H": 80.06
+    },
+    {
+      "no": 32,
+      "skpd": "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Daerah",
+      "capaian": 22.94,
+      "keuangan": 76.1,
+      "E": 90,
+      "F": 40,
+      "G": 3.5,
+      "H": 78.4
+    },
+    {
+      "no": 33,
+      "skpd": "Badan Penghubung Daerah",
+      "capaian": 19.94,
+      "keuangan": 60.19,
+      "E": 34,
+      "F": 41,
+      "G": 2.3,
+      "H": 78.93
+    },
+    {
+      "no": 34,
+      "skpd": "Inspektorat Daerah",
+      "capaian": 0,
+      "keuangan": 70.68,
+      "E": 90,
+      "F": 42,
+      "G": 5,
+      "H": 80.34
+    },
+    {
+      "no": 35,
+      "skpd": "Badan Kesatuan Bangsa dan Politik Daerah",
+      "capaian": 81.67,
+      "keuangan": 81.21,
+      "E": 83,
+      "F": 42,
+      "G": 4.1,
+      "H": 79.99
+    }
+  ]
+}
