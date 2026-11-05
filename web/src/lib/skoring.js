@@ -10,7 +10,7 @@
 // `singkat` dipakai di panel rincian; `unit` untuk keterangan satuan.
 export const INDIKATOR = [
 	{ key: 'capaian', label: 'Capaian Kinerja TW III', singkat: 'Capaian Kinerja', unit: '%', dimensi: 'D1', peran: 'Hasil (output/outcome)' },
-	{ key: 'keuangan', label: 'Realisasi Keuangan TW III', singkat: 'Realisasi Keuangan', unit: '%', dimensi: 'D2', peran: 'Eksekusi anggaran' },
+	{ key: 'keuangan', label: 'Realisasi Keuangan TW III', singkat: 'Realisasi Keuangan', unit: '%', dimensi: 'D2', peran: 'Realisasi anggaran' },
 	{ key: 'inovasi', label: 'Indeks Kematangan Inovasi', singkat: 'Indeks Inovasi', unit: 'poin', dimensi: 'D3', peran: 'Kapasitas' },
 	{ key: 'ikpd', label: 'Indeks Kematangan Perangkat Daerah', singkat: 'Kematangan PD', unit: 'poin', dimensi: 'D3', peran: 'Kapasitas' },
 	{ key: 'spbe', label: 'Indeks SPBE (TW II)', singkat: 'Indeks SPBE', unit: '0–5', dimensi: 'D3', peran: 'Kapasitas' },
@@ -24,8 +24,8 @@ export const INDIKATOR = [
 export const KEYS = INDIKATOR.map((i) => i.key);
 
 export const DIMENSI = [
-	{ kode: 'D1', nama: 'Hasil Kinerja', keys: ['capaian'], warna: 'var(--dim-hasil)' },
-	{ kode: 'D2', nama: 'Eksekusi Anggaran', keys: ['keuangan'], warna: 'var(--dim-eksekusi)' },
+	{ kode: 'D1', nama: 'Capaian Kinerja', keys: ['capaian'], warna: 'var(--dim-hasil)' },
+	{ kode: 'D2', nama: 'Realisasi Anggaran', keys: ['keuangan'], warna: 'var(--dim-eksekusi)' },
 	{
 		kode: 'D3',
 		nama: 'Kapasitas & Kepatuhan',

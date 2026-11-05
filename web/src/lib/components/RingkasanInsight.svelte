@@ -76,9 +76,9 @@
 					>1</span
 				>
 				<span class="text-sm leading-relaxed text-[#33475b]">
-					Dimensi <b>Hasil Kinerja</b> paling lemah secara rata-rata (<b class="tnum"
+					Dimensi <b>Capaian Kinerja</b> paling lemah secara rata-rata (<b class="tnum"
 						>{num(info.rH, 2)}</b
-					>), di bawah Eksekusi (<span class="tnum">{num(info.rE, 2)}</span>) dan Kapasitas
+					>), di bawah Realisasi Anggaran (<span class="tnum">{num(info.rE, 2)}</span>) dan Kapasitas
 					(<span class="tnum">{num(info.rK, 2)}</span>). Perbaikan capaian kinerja berdampak paling besar.
 				</span>
 			</li>

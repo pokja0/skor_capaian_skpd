@@ -15,6 +15,10 @@ tren evaluasi, dan ringkasan sheet tambahan; **Peringkat** (`/peringkat/`) untuk
 tabel peringkat. Tren evaluasi memakai pemilih kartu per indikator + grafik hover.
 Data live diambil sekali lewat `data-skor.svelte.js` lalu dipakai bersama.
 
+Tiga dimensi memakai nama lazim: **D1 Capaian Kinerja**, **D2 Realisasi Anggaran**,
+**D3 Kapasitas & Kepatuhan**. Jangan mengganti labelnya tanpa memperbarui ekspor dan
+`docs/METODOLOGI.md`.
+
 ## Stack
 
 - SvelteKit 3 + Svelte 5 + Vite 8, dijalankan dengan Bun.

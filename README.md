@@ -104,7 +104,7 @@ Sulawesi Barat*, dan tagline **"Sulbar Maju dan Sejahtera"**.
 
 ## Metode (ringkas)
 
-- **10 indikator → 3 dimensi**: Hasil (capaian), Eksekusi (keuangan), Kapasitas & Kepatuhan
+- **10 indikator → 3 dimensi**: Capaian Kinerja, Realisasi Anggaran, Kapasitas & Kepatuhan
   (inovasi, kematangan PD, SPBE, SAKIP, PEKPP, SPM, Evidence MCsP, Evidence SPI).
 - Bobot dimensi setara **33,3%**; di dalam D3 indikator dirata-ratakan.
 - Normalisasi **absolut berbasis target** (skor tidak bergantung peserta lain).

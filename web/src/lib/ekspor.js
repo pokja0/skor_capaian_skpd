@@ -15,8 +15,8 @@ const KOLOM = [
 	'SKPD',
 	'Skor Akhir',
 	'Kategori',
-	'Skor Dimensi: Hasil',
-	'Skor Dimensi: Eksekusi',
+	'Skor Dimensi: Capaian Kinerja',
+	'Skor Dimensi: Realisasi Anggaran',
 	'Skor Dimensi: Kapasitas & Kepatuhan',
 	'Cakupan Data (dari 10)',
 	'Kuadran (Kinerja vs Anggaran)',
@@ -127,7 +127,7 @@ export async function unduhPdf({ hasil, ringkas, xBar, yBar }) {
 		return v.length ? v.reduce((a, b) => a + b, 0) / v.length : 0;
 	};
 	doc.text(
-		`Rata-rata dimensi: Hasil ${f(rata('d1'))} · Eksekusi ${f(rata('d2'))} · Kapasitas ${f(rata('d3'))}`,
+		`Rata-rata dimensi: Capaian Kinerja ${f(rata('d1'))} · Realisasi Anggaran ${f(rata('d2'))} · Kapasitas ${f(rata('d3'))}`,
 		12,
 		y
 	);
@@ -142,7 +142,7 @@ export async function unduhPdf({ hasil, ringkas, xBar, yBar }) {
 	// Tabel utama
 	autoTable(doc, {
 		startY: y + 4,
-		head: [['#', 'SKPD', 'Skor', 'Kategori', 'Hasil', 'Eksekusi', 'Kapasitas', 'Cakupan']],
+		head: [['#', 'SKPD', 'Skor', 'Kategori', 'Capaian', 'Realisasi', 'Kapasitas', 'Cakupan']],
 		body: urut.map((h) => [
 			Math.round(h.peringkat),
 			h.skpd,
@@ -180,7 +180,7 @@ export async function unduhPdf({ hasil, ringkas, xBar, yBar }) {
 	);
 
 	const head = [
-		['#', 'SKPD', 'Skor', 'Kategori', 'Hasil', 'Eksekusi', 'Kapasitas',
+		['#', 'SKPD', 'Skor', 'Kategori', 'Capaian', 'Realisasi', 'Kapasitas',
 		 ...INDIKATOR.map((i) => i.singkat), 'Kuadran']
 	];
 	const body = urut.map((h) => [

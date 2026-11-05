@@ -44,8 +44,8 @@ seluruhnya kosong sehingga **tidak dipakai**.
 
 | Dimensi | Bobot | Indikator |
 |---|---|---|
-| **D1 Hasil Kinerja** | 33,3% | Capaian Kinerja |
-| **D2 Eksekusi Anggaran** | 33,3% | Realisasi Keuangan |
+| **D1 Capaian Kinerja** | 33,3% | Capaian Kinerja |
+| **D2 Realisasi Anggaran** | 33,3% | Realisasi Keuangan |
 | **D3 Kapasitas & Kepatuhan** | 33,3% | Inovasi, Kematangan PD, SPBE, SAKIP, PEKPP, SPM, Evidence MCsP, Evidence SPI |
 
 Di dalam D3 setiap indikator berbobot setara dan **dirata-ratakan (aritmetik)**.

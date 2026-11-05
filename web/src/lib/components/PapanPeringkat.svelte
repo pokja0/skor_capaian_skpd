@@ -192,10 +192,10 @@
 					</TableRow>
 					<TableRow class="hover:bg-white">
 						<TableHead class="text-center">
-							<button type="button" class={kelasTh} onclick={() => urutkan('hasil')}>Hasil {arrow('hasil')}</button>
+							<button type="button" class={kelasTh} onclick={() => urutkan('hasil')}>Capaian Kinerja {arrow('hasil')}</button>
 						</TableHead>
 						<TableHead class="text-center">
-							<button type="button" class={kelasTh} onclick={() => urutkan('eksekusi')}>Eksekusi {arrow('eksekusi')}</button>
+							<button type="button" class={kelasTh} onclick={() => urutkan('eksekusi')}>Realisasi Anggaran {arrow('eksekusi')}</button>
 						</TableHead>
 						<TableHead class="text-center">
 							<button type="button" class={kelasTh} onclick={() => urutkan('kapasitas')}>Kapasitas {arrow('kapasitas')}</button>
@@ -296,8 +296,8 @@
 		</div>
 
 		<div class="mt-3 flex flex-wrap items-center gap-4 text-[11px] text-muted-foreground">
-			<span class="flex items-center gap-1.5"><i class="inline-block h-2.5 w-2.5 rounded-sm bg-[color:var(--dim-hasil)]"></i>Hasil (capaian kinerja)</span>
-			<span class="flex items-center gap-1.5"><i class="inline-block h-2.5 w-2.5 rounded-sm bg-[color:var(--dim-eksekusi)]"></i>Eksekusi (realisasi keuangan)</span>
+			<span class="flex items-center gap-1.5"><i class="inline-block h-2.5 w-2.5 rounded-sm bg-[color:var(--dim-hasil)]"></i>Capaian Kinerja</span>
+			<span class="flex items-center gap-1.5"><i class="inline-block h-2.5 w-2.5 rounded-sm bg-[color:var(--dim-eksekusi)]"></i>Realisasi Anggaran</span>
 			<span class="flex items-center gap-1.5"><i class="inline-block h-2.5 w-2.5 rounded-sm bg-[color:var(--dim-kapasitas)]"></i>Kapasitas &amp; kepatuhan</span>
 			<span class="no-print">· klik judul kolom untuk mengurutkan · klik baris untuk rincian</span>
 		</div>

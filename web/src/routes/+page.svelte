@@ -109,7 +109,7 @@
 				<h3 class="mb-2 font-semibold text-foreground">Catatan penting</h3>
 				<ul class="list-disc space-y-1.5 pl-5">
 					<li>
-						<b>10 indikator → 3 dimensi.</b> D1 Hasil (capaian), D2 Eksekusi (keuangan), D3 Kapasitas &amp;
+						<b>10 indikator → 3 dimensi.</b> D1 Capaian Kinerja, D2 Realisasi Anggaran, D3 Kapasitas &amp;
 						Kepatuhan (inovasi, kematangan PD, SPBE, SAKIP, PEKPP, SPM, Evidence MCsP &amp; SPI).
 					</li>
 					<li><b>Bobot dimensi setara 33,3%.</b> Di dalam D3, indikator dinilai setara dan dirata-ratakan.</li>
