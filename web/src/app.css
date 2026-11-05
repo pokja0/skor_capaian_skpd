@@ -4,50 +4,65 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ---------------------------------------------------------------------------
-   Tema (token shadcn-svelte) — disetel ke nuansa kebiruan pemerintahan.
+   Tema — palet & tipografi mengikuti dashboard pembanding (navy/teal/gold).
 --------------------------------------------------------------------------- */
 :root {
-	--radius: 0.7rem;
+	--radius: 1rem;
 
-	--background: #eef2f7;
-	--foreground: #14202e;
+	--background: #f4f7fb;
+	--foreground: #172033;
 
 	--card: #ffffff;
-	--card-foreground: #14202e;
+	--card-foreground: #172033;
 
 	--popover: #ffffff;
-	--popover-foreground: #14202e;
+	--popover-foreground: #172033;
 
-	--primary: #17365d;
+	--primary: #0b2340;
 	--primary-foreground: #ffffff;
 
-	--secondary: #e3ebf5;
-	--secondary-foreground: #17365d;
+	--secondary: #e8eefd;
+	--secondary-foreground: #1d4ed8;
 
-	--muted: #eef2f7;
-	--muted-foreground: #5b6b7c;
+	--muted: #eef2f8;
+	--muted-foreground: #64748b;
 
-	--accent: #e3ebf5;
-	--accent-foreground: #17365d;
+	--accent: #e8eefd;
+	--accent-foreground: #1d4ed8;
 
-	--destructive: #d1495b;
+	--destructive: #b42318;
 	--destructive-foreground: #ffffff;
 
-	--border: #dde5ee;
-	--input: #dde5ee;
-	--ring: #2e6fb7;
+	--border: #e2e8f0;
+	--input: #e2e8f0;
+	--ring: #2563eb;
+
+	/* aksen */
+	--navy: #0b2340;
+	--navy-2: #12395f;
+	--teal: #0f766e;
+	--teal-2: #1f8a78;
+	--gold: #b7791f;
+	--gold-2: #e0a030;
+	--blue: #1d4ed8;
+	--blue-2: #2563eb;
+	--red: #b42318;
+	--green: #2e7d32;
 
 	/* warna kategori kinerja */
-	--kat-sangat-baik: #1a7f37;
-	--kat-baik: #43a047;
-	--kat-cukup: #e8a020;
-	--kat-kurang: #d1495b;
-	--kat-nol: #6b7280;
+	--kat-sangat-baik: #2e7d32;
+	--kat-baik: #5b9a3f;
+	--kat-cukup: #b7791f;
+	--kat-kurang: #b42318;
+	--kat-nol: #94a3b8;
 
-	/* dimensi */
-	--dim-hasil: #2e6fb7;
-	--dim-eksekusi: #2f9e7a;
-	--dim-kapasitas: #8a6fd1;
+	/* warna dimensi */
+	--dim-hasil: #2563eb;
+	--dim-eksekusi: #1f8a78;
+	--dim-kapasitas: #7c5cd6;
+
+	--shadow-sm: 0 1px 2px rgba(15, 35, 64, 0.05), 0 6px 18px rgba(15, 35, 64, 0.05);
+	--shadow-md: 0 10px 30px rgba(15, 35, 64, 0.09);
 }
 
 @theme inline {
@@ -90,19 +105,182 @@
 	* {
 		border-color: var(--border);
 	}
+	html {
+		scroll-behavior: smooth;
+		-webkit-text-size-adjust: 100%;
+	}
 	body {
-		background-color: var(--background);
+		min-width: 320px;
 		color: var(--foreground);
 		font-family:
-			'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial,
-			sans-serif;
+			'Plus Jakarta Sans', 'Plus Jakarta Sans Variable', 'Segoe UI', system-ui, -apple-system,
+			Roboto, Helvetica, Arial, sans-serif;
+		font-size: 15px;
+		line-height: 1.55;
 		-webkit-font-smoothing: antialiased;
+		background:
+			radial-gradient(1100px 500px at 100% -10%, rgba(29, 78, 216, 0.08), transparent 60%),
+			radial-gradient(900px 450px at -10% 5%, rgba(15, 118, 110, 0.07), transparent 55%),
+			var(--background);
+		background-attachment: fixed;
 	}
 }
 
 /* Angka skor rata kanan supaya mudah dibandingkan */
 .tnum {
 	font-variant-numeric: tabular-nums;
+}
+
+/* Label kecil bergaya "eyebrow" */
+.eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--blue-2);
+	font-size: 10px;
+	font-weight: 800;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+}
+.eyebrow::before {
+	content: '';
+	width: 22px;
+	height: 3px;
+	border-radius: 99px;
+	background: currentColor;
+}
+.eyebrow.terang {
+	color: #8fd3cb;
+}
+
+/* Judul kartu */
+.judul-kartu {
+	font-size: clamp(16px, 1.4vw, 19px);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	color: var(--primary);
+}
+
+/* Hero / kop identitas */
+.hero {
+	position: relative;
+	overflow: hidden;
+	border-radius: 28px;
+	padding: clamp(22px, 3.2vw, 36px);
+	color: #fff;
+	box-shadow: 0 24px 60px rgba(11, 35, 64, 0.2);
+	background:
+		radial-gradient(800px 400px at 100% -20%, rgba(29, 78, 216, 0.55), transparent 60%),
+		linear-gradient(135deg, #0b2340 0%, #12395f 62%, #1d4ed8 145%);
+}
+.hero::before,
+.hero::after {
+	content: '';
+	position: absolute;
+	border-radius: 50%;
+	pointer-events: none;
+}
+.hero::before {
+	top: -100px;
+	right: 18%;
+	width: 250px;
+	height: 250px;
+	border: 1px solid rgba(255, 255, 255, 0.16);
+}
+.hero::after {
+	right: -120px;
+	bottom: -180px;
+	width: 420px;
+	height: 420px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.hero-judul {
+	margin-top: 10px;
+	font-size: clamp(26px, 3.6vw, 40px);
+	font-weight: 800;
+	line-height: 1.05;
+	letter-spacing: -0.05em;
+}
+.hero-sub {
+	margin-top: 8px;
+	color: rgba(255, 255, 255, 0.82);
+	font-size: 13px;
+}
+
+
+/* Bilah navigasi atas */
+.topbar {
+	position: sticky;
+	top: 0;
+	z-index: 40;
+	border-bottom: 1px solid var(--border);
+	background: rgba(255, 255, 255, 0.92);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+.nav-tab {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 14px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 700;
+	color: var(--muted-foreground);
+	transition:
+		background 0.15s ease,
+		color 0.15s ease;
+}
+.nav-tab:hover {
+	background: var(--muted);
+	color: var(--primary);
+}
+.nav-tab.aktif {
+	background: var(--primary);
+	color: #fff;
+}
+.nav-tab.aktif:hover {
+	background: var(--navy-2);
+	color: #fff;
+}
+
+/* Gerak */
+@keyframes muncul {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+.anim-muncul {
+	animation: muncul 0.5s ease both;
+}
+.bilah {
+	transition: width 0.4s ease;
+}
+.kartu-hover {
+	transition:
+		box-shadow 0.2s ease,
+		transform 0.2s ease;
+}
+.kartu-hover:hover {
+	box-shadow: var(--shadow-md);
+	transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
 }
 
 /* ---------------------------------------------------------------------------
@@ -113,7 +291,6 @@
 		size: A4;
 		margin: 12mm;
 	}
-	/* Pertahankan warna latar (lambang, header, label kategori) saat dicetak */
 	* {
 		-webkit-print-color-adjust: exact !important;
 		print-color-adjust: exact !important;

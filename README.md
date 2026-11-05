@@ -1,11 +1,14 @@
-# Dashboard Penilaian Kinerja SKPD
+# Penilaian Kinerja SKPD
 
 Dashboard eksekutif untuk Sekretaris Daerah: menampilkan **skor, peringkat, dan kategori**
 kinerja 35 perangkat daerah, dengan metode **indeks komposit non-kompensatoris**.
 
 Dibangun dengan **SvelteKit (Svelte 5) + Vite + Bun**, memakai **Tailwind CSS** dan komponen
 bergaya **shadcn-svelte**. Seluruh perhitungan (impor data, skoring, tampilan) berjalan dengan
-JavaScript/Bun — tidak ada lagi skrip Python.
+JavaScript/Bun.
+
+**Sumber data:** Google Sheet *"Capaian OPD"* — dibaca **live** saat halaman dibuka (JSONP),
+dengan snapshot hasil build sebagai cadangan.
 
 ## Menjalankan
 
@@ -23,44 +26,53 @@ bun run preview    # pratinjau hasil build (http://localhost:4173)
 bun run dev        # mode pengembangan
 ```
 
-**Memperbarui data:** ganti `data/Capaian OPD.xlsx`, lalu `bun run build` lagi.
+**Memperbarui data:** cukup ubah Google Sheet-nya. Untuk memperbarui *snapshot* (cadangan &
+isi PDF/XLSX saat offline), jalankan `bun run build` lagi.
 
 ## Struktur
 
 ```
 skor_capaian_skpd/
-├── data/Capaian OPD.xlsx        # sumber data (tidak diubah)
+├── data/snapshot.xlsx           # snapshot terakhir dari Google Sheet (cadangan)
+├── data/Capaian OPD.xlsx        # arsip data lama (tidak dipakai build)
 ├── docs/METODOLOGI.md           # metode, validasi, keterbatasan
-├── netlify.toml                 # konfigurasi deploy Netlify
+├── docs/DEPLOY_VERCEL.md        # panduan deploy
 ├── jalankan.sh                  # satu perintah untuk membangun ulang
 └── web/
-    ├── scripts/import-xlsx.mjs  # Excel → JSON (tanpa dependensi)
+    ├── scripts/import-xlsx.mjs  # Google Sheet → data.json (tanpa dependensi)
     ├── src/lib/
-    │   ├── skoring.js           # mesin skor
-    │   ├── ekspor.js            # unduh XLSX & cetak PDF
-    │   ├── data.json            # hasil impor
+    │   ├── skoring.js           # mesin skor 10 indikator
+    │   ├── sumber-live.js       # pembacaan live (JSONP) di peramban
+    │   ├── ekspor.js            # unduh XLSX & PDF
+    │   ├── data.json            # snapshot hasil impor (generated)
     │   └── components/          # komponen dashboard + UI (shadcn-svelte)
     ├── src/routes/+page.svelte  # halaman dashboard
     ├── vercel.json              # konfigurasi deploy Vercel
     └── build/                   # hasil build (siap hosting)
 ```
 
-## Isi dashboard
+## Isi dashboard (2 halaman)
 
-- **Header identitas**: lambang Sulawesi Barat, "Pemerintah Provinsi Sulawesi Barat", tagline
-  *"Sulbar Maju dan Sejahtera"*, tombol **Unduh XLSX** dan **Unduh PDF**.
-- **Tiga Terbaik** (podium visual) dan **Ringkasan & Insight**: tiga angka kunci (rata-rata, median,
-  rentang) plus analisis singkat — dirancang agar tidak mengulang informasi yang sudah tampil di
-  podium, donut, atau kartu peringatan.
-- **Peringkat & skor** 35 SKPD: pencarian, filter kategori & jenis, **header "Dimensi" yang di-merge**
-  dengan nilai angka Hasil/Eksekusi/Kapasitas, serta **klik baris** untuk melihat nilai indikator asli.
-- **Distribusi kategori**, dan kartu peringatan berwarna **Prioritas / Perhatian / Informasi**.
-- **Kinerja vs Anggaran**: diagram sebar capaian kinerja terhadap penyerapan anggaran, dengan garis
-  rata-rata dan empat kuadran (Optimal / Telusuri / Efisien / Perlu perhatian). **Klik sebuah kuadran**
-  untuk menyaring grafik dan menampilkan daftar SKPD di dalamnya; kursor ke titik untuk detail.
-- **Unduhan**: **XLSX** memuat seluruh nilai asli indikator, skor dimensi, dan kuadran tiap SKPD;
-  **PDF** menyertakan **Lampiran — Data Lengkap** (35 SKPD × skor dimensi + nilai asli + kuadran).
-- **Catatan Penting & Metodologi** dalam satu panel yang dapat dibuka (menekan beban kognitif).
+Navigasi memakai **bilah atas (sticky)** dengan tab **Ringkasan** dan **Peringkat**.
+
+**1) Ringkasan** (`/`)
+- Kartu KPI: jumlah SKPD, skor tertinggi, rata-rata/median, jumlah perlu perhatian.
+- Ringkasan & Insight + distribusi kategori + kartu Prioritas/Perhatian/Cakupan data.
+- Diagram sebar **Kinerja vs Anggaran** (4 kuadran, dapat diklik).
+- **Tren Data Evaluasi 2020–2026** — pilih indikator lewat kartu, lalu lihat grafik garis dengan
+  hover/tooltip per tahun + tabel angka yang bisa dibuka.
+- **Komponen SAKIP & Reformasi Birokrasi** (2024 vs 2025).
+- **Rincian Perbandingan Nilai SPM** per urusan (2025 vs 2026).
+- Catatan Penting & Metodologi (dapat dibuka).
+
+**2) Peringkat** (`/peringkat/`)
+- **Tiga Terbaik** (podium emas/perak/perunggu dengan dasar rata).
+- **Tabel peringkat** 35 SKPD selebar penuh: pencarian, chip kategori, klik judul kolom
+  untuk mengurutkan, **klik baris** untuk rincian 10 indikator (nilai **merah** bila di
+  bawah rata-rata SKPD pada indikator tersebut).
+
+**Unduhan** (dari header): **XLSX** memuat 10 nilai asli indikator, 3 skor dimensi, cakupan
+data, dan kuadran; **PDF** (teks vektor) memuat ringkasan + tabel utama + Lampiran Data Lengkap.
 
 ## Deploy (hosting statis)
 
@@ -92,9 +104,12 @@ Sulawesi Barat*, dan tagline **"Sulbar Maju dan Sejahtera"**.
 
 ## Metode (ringkas)
 
-- 6 indikator → 3 dimensi (Hasil, Eksekusi, Kapasitas), bobot dimensi setara 33,3%.
+- **10 indikator → 3 dimensi**: Hasil (capaian), Eksekusi (keuangan), Kapasitas & Kepatuhan
+  (inovasi, kematangan PD, SPBE, SAKIP, PEKPP, SPM, Evidence MCsP, Evidence SPI).
+- Bobot dimensi setara **33,3%**; di dalam D3 indikator dirata-ratakan.
 - Normalisasi **absolut berbasis target** (skor tidak bergantung peserta lain).
 - Agregasi **geometrik** `∛(D1 × D2 × D3)` → non-kompensatoris (capaian 0 ⇒ skor 0).
+- **Data kosong** tidak diikutkan (bobot dinormalisasi ulang); **nilai 0 tetap dinilai 0**.
 - Kategori ambang absolut: ≥70 Sangat Baik · 60–70 Baik · 45–60 Cukup · <45 Kurang · =0 Skor 0.
 
 Rincian lengkap: [`docs/METODOLOGI.md`](docs/METODOLOGI.md).

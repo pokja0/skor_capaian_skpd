@@ -17,7 +17,7 @@
 
 <div class={cn('rounded-lg border-l-4 p-3.5', gaya[tone])}>
 	<div class={cn('mb-1 text-[11px] font-bold uppercase tracking-wide', warnaJudul[tone])}>{judul}</div>
-	<div class="text-[13.5px] leading-relaxed text-[#33475b]">
+	<div class="text-sm leading-relaxed text-[#33475b]">
 		{@render children?.()}
 	</div>
 </div>

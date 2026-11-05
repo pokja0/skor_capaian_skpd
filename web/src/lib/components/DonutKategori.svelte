@@ -7,7 +7,7 @@
 
 <Card class="break-inside-avoid">
 	<CardHeader>
-		<CardTitle class="text-base text-[color:var(--primary)]">Distribusi Kategori</CardTitle>
+		<CardTitle class="judul-kartu">Distribusi Kategori</CardTitle>
 	</CardHeader>
 	<CardContent>
 		<div class="flex flex-wrap items-center gap-5">

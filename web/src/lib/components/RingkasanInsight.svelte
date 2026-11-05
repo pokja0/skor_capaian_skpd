@@ -31,7 +31,7 @@
 
 <Card class="break-inside-avoid">
 	<CardHeader>
-		<CardTitle class="text-base text-[color:var(--primary)]">Ringkasan &amp; Insight</CardTitle>
+		<CardTitle class="judul-kartu">Ringkasan &amp; Insight</CardTitle>
 	</CardHeader>
 	<CardContent>
 		<!-- Tiga angka kunci -->
@@ -75,7 +75,7 @@
 					class="mt-[2px] grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[color:var(--dim-hasil)]/12 text-[11px] font-bold text-[color:var(--dim-hasil)]"
 					>1</span
 				>
-				<span class="text-[13px] leading-relaxed text-[#33475b] sm:text-[13.5px]">
+				<span class="text-sm leading-relaxed text-[#33475b]">
 					Dimensi <b>Hasil Kinerja</b> paling lemah secara rata-rata (<b class="tnum"
 						>{num(info.rH, 2)}</b
 					>), di bawah Eksekusi (<span class="tnum">{num(info.rE, 2)}</span>) dan Kapasitas
@@ -88,7 +88,7 @@
 						class="mt-[2px] grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[color:var(--kat-cukup)]/20 text-[11px] font-bold text-[#b97e00]"
 						>2</span
 					>
-					<span class="text-[13px] leading-relaxed text-[#33475b] sm:text-[13.5px]">
+					<span class="text-sm leading-relaxed text-[#33475b]">
 						Kelompok <b>{info.tipeTerburuk.tipe}</b> paling tertinggal: <b class="tnum"
 							>{info.tipeTerburuk.jumlah} dari {info.tipeTerburuk.total}</b
 						> unitnya berkinerja Cukup atau lebih rendah.

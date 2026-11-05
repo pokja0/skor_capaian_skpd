@@ -1,27 +1,37 @@
 /**
- * skoring.js — Mesin penilaian kinerja SKPD (port dari skoring.py yang tervalidasi).
+ * skoring.js — Mesin penilaian kinerja SKPD.
  *
- * Metode utama:
- *   Normalisasi ABSOLUT berbasis target → 3 dimensi → agregasi GEOMETRIK (non-kompensatoris).
- *
- * Angka acuan (harus sama dengan versi Python):
- *   Dinas Tanaman Pangan = 78,84 ; enam SKPD bercapaian 0 = skor 0.
+ * 10 indikator → 3 dimensi → agregasi geometrik antar-dimensi.
+ * Nilai KOSONG (tidak dinilai) tidak diikutkan; bobot dinormalisasi ulang.
+ * Nilai 0 tetap dihitung sebagai 0.
  */
 
-// --- Definisi indikator & dimensi -----------------------------------------
+// --- Indikator ------------------------------------------------------------
+// `singkat` dipakai di panel rincian; `unit` untuk keterangan satuan.
 export const INDIKATOR = [
-	{ key: 'capaian', label: 'Capaian Kinerja TW III', unit: '%', dimensi: 'D1', peran: 'Hasil (output/outcome)' },
-	{ key: 'keuangan', label: 'Realisasi Keuangan TW III', unit: '%', dimensi: 'D2', peran: 'Eksekusi anggaran' },
-	{ key: 'E', label: 'Indeks Kematangan Inovasi', unit: 'poin', dimensi: 'D3', peran: 'Kapasitas' },
-	{ key: 'F', label: 'Indeks Kematangan Perangkat Daerah', unit: 'poin', dimensi: 'D3', peran: 'Kapasitas' },
-	{ key: 'G', label: 'Indeks SPBE (TW II)', unit: 'poin 0–5', dimensi: 'D3', peran: 'Kapasitas' },
-	{ key: 'H', label: 'Nilai SAKIP (2025)', unit: 'poin 0–100', dimensi: 'D3', peran: 'Kapasitas' }
+	{ key: 'capaian', label: 'Capaian Kinerja TW III', singkat: 'Capaian Kinerja', unit: '%', dimensi: 'D1', peran: 'Hasil (output/outcome)' },
+	{ key: 'keuangan', label: 'Realisasi Keuangan TW III', singkat: 'Realisasi Keuangan', unit: '%', dimensi: 'D2', peran: 'Eksekusi anggaran' },
+	{ key: 'inovasi', label: 'Indeks Kematangan Inovasi', singkat: 'Indeks Inovasi', unit: 'poin', dimensi: 'D3', peran: 'Kapasitas' },
+	{ key: 'ikpd', label: 'Indeks Kematangan Perangkat Daerah', singkat: 'Kematangan PD', unit: 'poin', dimensi: 'D3', peran: 'Kapasitas' },
+	{ key: 'spbe', label: 'Indeks SPBE (TW II)', singkat: 'Indeks SPBE', unit: '0–5', dimensi: 'D3', peran: 'Kapasitas' },
+	{ key: 'sakip', label: 'Nilai SAKIP (2025)', singkat: 'Nilai SAKIP', unit: '0–100', dimensi: 'D3', peran: 'Kapasitas' },
+	{ key: 'pekpp', label: 'PEKPP', singkat: 'PEKPP', unit: '0–5', dimensi: 'D3', peran: 'Kepatuhan' },
+	{ key: 'spm', label: 'Nilai SPM', singkat: 'Nilai SPM', unit: '0–100', dimensi: 'D3', peran: 'Pelayanan' },
+	{ key: 'evmcsp', label: 'Pemenuhan Evidence MCsP', singkat: 'Ev. MCsP', unit: '0–100', dimensi: 'D3', peran: 'Kepatuhan' },
+	{ key: 'evspi', label: 'Pemenuhan Evidence SPI', singkat: 'Ev. SPI', unit: '0–100', dimensi: 'D3', peran: 'Kepatuhan' }
 ];
+
+export const KEYS = INDIKATOR.map((i) => i.key);
 
 export const DIMENSI = [
 	{ kode: 'D1', nama: 'Hasil Kinerja', keys: ['capaian'], warna: 'var(--dim-hasil)' },
 	{ kode: 'D2', nama: 'Eksekusi Anggaran', keys: ['keuangan'], warna: 'var(--dim-eksekusi)' },
-	{ kode: 'D3', nama: 'Kapasitas & Tata Kelola', keys: ['E', 'F', 'G', 'H'], warna: 'var(--dim-kapasitas)' }
+	{
+		kode: 'D3',
+		nama: 'Kapasitas & Kepatuhan',
+		keys: ['inovasi', 'ikpd', 'spbe', 'sakip', 'pekpp', 'spm', 'evmcsp', 'evspi'],
+		warna: 'var(--dim-kapasitas)'
+	}
 ];
 
 export const KATEGORI_URUT = ['Sangat Baik', 'Baik', 'Cukup', 'Kurang', 'Skor 0'];
@@ -34,24 +44,26 @@ export const KATEGORI_WARNA = {
 	'Skor 0': 'var(--kat-nol)'
 };
 
+export const CAKUPAN_MIN = 8; // dari 10 indikator; di bawah ini ditandai "data terbatas"
+
 // --- Normalisasi absolut berbasis target ----------------------------------
 export function normAbsolut(key, v) {
-	if (key === 'capaian') return Math.min(v, 110); // target 100%, dipotong di 110
-	if (key === 'keuangan') return Math.min(v, 100); // target 100%
-	if (key === 'G') return (v / 5) * 100; // SPBE 0–5 → 0–100 (penyetaraan satuan)
-	return v; // E, F, H dipakai apa adanya
+	if (v === null || v === undefined || Number.isNaN(v)) return null;
+	if (key === 'capaian') return Math.min(v, 110);
+	if (key === 'keuangan') return Math.min(v, 100);
+	if (key === 'spbe' || key === 'pekpp') return (v / 5) * 100;
+	return v;
 }
 
-function rata(arr) {
-	return arr.reduce((a, b) => a + b, 0) / arr.length;
+function rataAngka(arr) {
+	const v = arr.filter((x) => x !== null && x !== undefined && !Number.isNaN(x));
+	return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
 }
 
 // --- Peringkat (seri memakai rata-rata posisi) ----------------------------
 export function beriPeringkat(skorArr) {
 	const n = skorArr.length;
-	const idx = Array.from({ length: n }, (_, i) => i).sort(
-		(a, b) => skorArr[b] - skorArr[a] || a - b
-	);
+	const idx = Array.from({ length: n }, (_, i) => i).sort((a, b) => skorArr[b] - skorArr[a] || a - b);
 	const rank = new Array(n);
 	let i = 0;
 	while (i < n) {
@@ -64,8 +76,8 @@ export function beriPeringkat(skorArr) {
 	return rank;
 }
 
-export function kategoriDari(skor, capaianNol) {
-	if (capaianNol) return 'Skor 0';
+export function kategoriDari(skor) {
+	if (skor === 0) return 'Skor 0';
 	if (skor >= 70) return 'Sangat Baik';
 	if (skor >= 60) return 'Baik';
 	if (skor >= 45) return 'Cukup';
@@ -76,40 +88,43 @@ export function kategoriDari(skor, capaianNol) {
 export function hitungSkor(records) {
 	const dasar = records.map((r) => {
 		const s = {};
-		for (const ind of INDIKATOR) s[ind.key] = normAbsolut(ind.key, r[ind.key]);
+		let terisi = 0;
+		for (const ind of INDIKATOR) {
+			s[ind.key] = normAbsolut(ind.key, r[ind.key]);
+			if (r[ind.key] !== null && r[ind.key] !== undefined) terisi++;
+		}
+
 		const d1 = s.capaian;
 		const d2 = s.keuangan;
-		const d3 = rata([s.E, s.F, s.G, s.H]);
-		const skor = d1 <= 0 || d2 <= 0 || d3 <= 0 ? 0 : Math.cbrt(d1 * d2 * d3);
+		const d3 = rataAngka([s.inovasi, s.ikpd, s.spbe, s.sakip, s.pekpp, s.spm, s.evmcsp, s.evspi]);
+
+		// Geometrik antar-dimensi; dimensi yang kosong tidak diikutkan.
+		const dims = [d1, d2, d3].filter((v) => v !== null && v !== undefined);
+		let skor = 0;
+		if (dims.length && !dims.some((v) => v <= 0)) {
+			skor = Math.exp(dims.reduce((a, v) => a + Math.log(v), 0) / dims.length);
+		}
+
 		return {
 			...r,
-			s: {
-				capaian: s.capaian,
-				keuangan: s.keuangan,
-				E: s.E,
-				F: s.F,
-				G: s.G,
-				H: s.H
-			},
+			s,
 			d1,
 			d2,
 			d3,
-			skor
+			skor,
+			cakupan: terisi,
+			dataTerbatas: terisi < CAKUPAN_MIN
 		};
 	});
 
 	const peringkat = beriPeringkat(dasar.map((d) => d.skor));
-	const hasil = dasar.map((d, i) => {
-		const capaianNol = d.capaian === 0;
-		return {
-			...d,
-			peringkat: peringkat[i],
-			kategori: kategoriDari(d.skor, capaianNol),
-			capaianNol,
-			seri: peringkat.filter((p) => p === peringkat[i]).length > 1
-		};
-	});
-	return hasil;
+	return dasar.map((d, i) => ({
+		...d,
+		peringkat: peringkat[i],
+		kategori: kategoriDari(d.skor),
+		capaianNol: d.capaian === 0,
+		seri: peringkat.filter((p) => p === peringkat[i]).length > 1
+	}));
 }
 
 // --- Ringkasan & statistik -------------------------------------------------
@@ -121,57 +136,33 @@ export function ringkas(hasil) {
 	const kategori = {};
 	for (const k of KATEGORI_URUT) kategori[k] = 0;
 	for (const h of hasil) kategori[h.kategori]++;
-
-	const juara = [...hasil].sort((a, b) => b.skor - a.skor)[0];
 	return {
 		jumlah: n,
 		skorMax: Math.max(...skor),
 		skorMin: Math.min(...skor),
 		skorMedian: median,
-		skorRata: rata(skor),
-		juara,
+		skorRata: rataAngka(skor),
+		juara: [...hasil].sort((a, b) => b.skor - a.skor)[0],
 		kategori,
 		baik: (kategori['Sangat Baik'] || 0) + (kategori['Baik'] || 0),
 		perhatian: (kategori['Kurang'] || 0) + (kategori['Skor 0'] || 0)
 	};
 }
 
-// --- Nama pendek untuk tabel ----------------------------------------------
-const PENDEK = [
-	[/^Dinas Komunikasi.*/, 'Dinas Kominfo & Statistik'],
-	[/^Dinas Koperasi.*/, 'Dinas Koperasi & UKM'],
-	[/^Dinas Penanaman Modal.*/, 'Dinas Penanaman Modal (PTSP)'],
-	[/^Dinas Kepemudaan.*/, 'Dinas Pariwisata & Ekraf'],
-	[/^Dinas Pekerjaan Umum.*/, 'Dinas PU & Penataan Ruang'],
-	[/^Dinas Perumahan.*/, 'Dinas Perumahan & Permukiman'],
-	[/^Dinas Sosial.*/, 'Dinas Sosial & PMD'],
-	[/^Dinas Tanaman Pangan.*/, 'Dinas Pertanian & Peternakan'],
-	[/^Badan Perencanaan Pembangunan.*/, 'Bappeda'],
-	[/^Badan Pengelolaan Keuangan dan Aset.*/, 'BPKAD'],
-	[/^Badan Kepegawaian.*/, 'BKPSDM'],
-	[/^Badan Kesatuan Bangsa.*/, 'Badan Kesbangpol'],
-	[/^Badan Pendapatan.*/, 'Badan Pendapatan Daerah'],
-	[/^Badan Penghubung.*/, 'Badan Penghubung'],
-	[/^Badan Penanggulangan Bencana.*/, 'BPBD'],
-	[/^Dinas Kependudukan.*/, 'Dinas Dukcapil'],
-	[/^Sekretariat Dewan Perwakilan Rakyat.*/, 'Sekretariat DPRD'],
-	[/^Dinas Lingkungan Hidup.*/, 'Dinas Lingkungan Hidup & Kehutanan'],
-	[/^Dinas Transmigrasi.*/, 'Dinas Transmigrasi & Tenaga Kerja'],
-	[/^Dinas Kelautan.*/, 'Dinas Kelautan & Perikanan'],
-	[/^Dinas Perpustakaan.*/, 'Dinas Perpustakaan & Kearsipan'],
-	[/^Dinas Energi.*/, 'Dinas ESDM'],
-	[/^Dinas Pendidikan.*/, 'Dinas Pendidikan & Kebudayaan'],
-	[/^Dinas Kesehatan.*/, 'Dinas Kesehatan'],
-	[/^Biro Pemerintahan.*/, 'Biro Pemerintahan & Kesra'],
-	[/^Biro Perekonomian.*/, 'Biro Perekonomian & Adpem'],
-	[/^Biro Pengadaan.*/, 'Biro Pengadaan Barang & Jasa'],
-	[/ Daerah$/, '']
-];
+/** Rata-rata nilai ASLI tiap indikator (untuk penanda merah di rincian). */
+export function rataIndikator(hasil) {
+	const out = {};
+	for (const key of KEYS) out[key] = rataAngka(hasil.map((h) => h[key]));
+	return out;
+}
 
-export function namaPendek(nama) {
-	let s = nama;
-	for (const [re, ganti] of PENDEK) s = s.replace(re, ganti);
-	return s.trim();
+/** Rata-rata skor tiap dimensi (untuk penanda merah di rincian). */
+export function rataDimensi(hasil) {
+	return {
+		d1: rataAngka(hasil.map((h) => h.d1)),
+		d2: rataAngka(hasil.map((h) => h.d2)),
+		d3: rataAngka(hasil.map((h) => h.d3))
+	};
 }
 
 export function tipeSKPD(nama) {
@@ -179,8 +170,7 @@ export function tipeSKPD(nama) {
 	if (n.startsWith('rumah sakit')) return 'RSUD';
 	if (n.startsWith('satuan polisi')) return 'Satpol PP';
 	if (n.startsWith('biro')) return 'Biro';
-	if (n.startsWith('badan') || n.startsWith('sekretariat') || n.startsWith('inspektorat'))
-		return 'Badan/Lembaga';
+	if (n.startsWith('badan') || n.startsWith('sekretariat') || n.startsWith('inspektorat')) return 'Badan/Lembaga';
 	if (n.startsWith('dinas')) return 'Dinas';
 	return 'Lainnya';
 }
@@ -195,12 +185,8 @@ export const KUADRAN = {
 
 export const KUADRAN_URUT = ['kananAtas', 'kananBawah', 'kiriAtas', 'kiriBawah'];
 
-/**
- * Menandai tiap SKPD dengan kuadran Kinerja (capaian) vs Anggaran (realisasi keuangan),
- * dipisahkan oleh garis rata-rata. Kembalikan hasil + nilai rata-rata kedua sumbu.
- */
 export function beriKuadran(hasil) {
-	const rerata = (k) => hasil.reduce((a, h) => a + h[k], 0) / hasil.length;
+	const rerata = (k) => rataAngka(hasil.map((h) => h[k]));
 	const xBar = rerata('keuangan');
 	const yBar = rerata('capaian');
 	const ditandai = hasil.map((h) => {
@@ -211,3 +197,5 @@ export function beriKuadran(hasil) {
 	});
 	return { hasil: ditandai, xBar, yBar };
 }
+
+export { rataAngka };

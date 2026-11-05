@@ -60,7 +60,7 @@
 
 <Card class="break-inside-avoid">
 	<CardHeader>
-		<CardTitle class="text-base text-[color:var(--primary)]">Kinerja vs Anggaran</CardTitle>
+		<CardTitle class="judul-kartu">Kinerja vs Anggaran</CardTitle>
 	</CardHeader>
 	<CardContent>
 		<div class="mb-2 text-[11px] text-muted-foreground pdf-hide sm:hidden">
@@ -123,7 +123,7 @@
 						onmouseleave={() => (hover = null)}
 						style="cursor:pointer"
 					>
-						<title>{h.namaPendek} — Capaian {num(h.capaian, 2)}% · Keuangan {num(h.keuangan, 2)}% · Skor {num(h.skor, 2)}</title>
+						<title>{h.skpd} — Capaian {num(h.capaian, 2)}% · Keuangan {num(h.keuangan, 2)}% · Skor {num(h.skor, 2)}</title>
 					</circle>
 				{/each}
 
@@ -138,7 +138,7 @@
 						fill="var(--primary)"
 						opacity={tampak(lp.h) ? 1 : 0.2}
 					>
-						{lp.h.namaPendek}
+						{lp.h.skpd}
 					</text>
 				{/each}
 
@@ -150,7 +150,7 @@
 					<g pointer-events="none">
 						<rect x={bx} y={by} width="220" height="56" rx="7" fill="#17365d" opacity="0.96" />
 						<text x={bx + 10} y={by + 17} font-size="11" font-weight="700" fill="#ffffff">
-							{h.namaPendek.length > 30 ? h.namaPendek.slice(0, 29) + '…' : h.namaPendek}
+							{h.skpd}
 						</text>
 						<text x={bx + 10} y={by + 33} font-size="10.5" fill="#d7e3f2">
 							Capaian {num(h.capaian, 2)}% · Keuangan {num(h.keuangan, 2)}%
@@ -231,7 +231,7 @@
 									<td class="tnum px-3 py-1.5 font-semibold text-[color:var(--primary)]">
 										{Math.round(h.peringkat)}
 									</td>
-									<td class="px-3 py-1.5" title={h.skpd}>{h.namaPendek}</td>
+									<td class="px-3 py-1.5">{h.skpd}</td>
 									<td class="tnum whitespace-nowrap px-3 py-1.5 text-right">{num(h.capaian, 2)}%</td>
 									<td class="tnum whitespace-nowrap px-3 py-1.5 text-right">{num(h.keuangan, 2)}%</td>
 									<td class="tnum px-3 py-1.5 text-right font-semibold">{num(h.skor, 2)}</td>

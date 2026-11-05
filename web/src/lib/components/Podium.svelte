@@ -18,7 +18,7 @@
 
 <Card class="break-inside-avoid">
 	<div class="flex flex-wrap items-baseline justify-between gap-2 px-5">
-		<h3 class="text-base font-semibold text-[color:var(--primary)]">Tiga Terbaik</h3>
+		<h3 class="judul-kartu">Tiga Terbaik</h3>
 		<span class="text-xs text-muted-foreground">Skor tertinggi periode ini</span>
 	</div>
 
@@ -30,7 +30,7 @@
 				<div class="flex w-full flex-col items-center px-1 text-center">
 					<div class="text-lg leading-none sm:text-2xl">{medal[r] || '🏅'}</div>
 					<div class="mt-1 line-clamp-3 text-[11px] font-semibold leading-tight sm:text-[12.5px]" title={h.skpd}>
-						{h.namaPendek}
+						{h.skpd}
 					</div>
 					<span
 						class="mt-1.5 inline-block whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-medium text-white"
