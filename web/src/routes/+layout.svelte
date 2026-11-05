@@ -102,7 +102,6 @@
 				<div class="flex items-center gap-3">
 					<img src="/lambang-sulbar.svg" alt="Lambang Provinsi Sulawesi Barat" class="h-14 w-auto shrink-0 drop-shadow-md sm:h-16" />
 					<div>
-						<p class="text-[10px] font-bold uppercase tracking-[0.16em] text-white/65">Identitas</p>
 						<p class="text-sm font-semibold italic">“Sulbar Maju dan Sejahtera”</p>
 						<p class="mt-0.5 text-[11px] text-white/70">Data per {waktu} WITA</p>
 					</div>
